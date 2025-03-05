@@ -7,18 +7,21 @@ import os
 load_dotenv()
 
 api_key_owm = os.getenv("OWM_API_KEY")
-if not api_key_owm:
-    raise ValueError("API key not found. Set OWM_API_KEY in your .env file.")
 api_key_wa = os.getenv("WA_API_KEY")
-if not api_key_wa:
-    raise ValueError("API key not found. Set WA_API_KEY in your .env file.")
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def hello():
-    return render_template('index.html')
+    try:
+        if not api_key_owm:
+            raise ValueError("Error: API key not found. Set OWM_API_KEY in your .env file.")
+        elif not api_key_wa:
+            raise ValueError("Error: API key not found. Set WA_API_KEY in your .env file.")
+        return render_template('index.html')
+    except Exception as error:
+        return render_template('index.html', error_message=error)
 
 
 @app.route('/', methods=['POST'])
