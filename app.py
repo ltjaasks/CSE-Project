@@ -13,7 +13,7 @@ api_key_wa = os.getenv("WA_API_KEY")
 if not api_key_wa:
     raise ValueError("API key not found. Set WA_API_KEY in your .env file.")
 
-app = Flask(__name__, template_folder="../templates")
+app = Flask(__name__)
 
 
 @app.route('/')
