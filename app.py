@@ -23,15 +23,27 @@ def hello():
 
 @app.route('/', methods=['POST'])
 def showTemperatures():
-    location = request.form['location']
-    response_owm = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric')
-    data_owm = response_owm.json()
+    try:
+        location = request.form['location'].capitalize().strip(" ")
+        print(location)
+        response_owm = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric')
+        data_owm = response_owm.json()
 
-    response_wa = requests.get(f'http://api.weatherapi.com/v1/current.json?key={api_key_wa}&q={location}&aqi=no')
-    data_wa = response_wa.json()
+        print(data_owm)
 
-    owm = data_owm["main"]["temp"]
-    wa = data_wa["current"]["temp_c"]
-    difference = round(abs(owm - wa), 2)
-    avg = round((owm + wa) / 2, 2)
-    return render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg)
+        if data_owm['cod'] != 200:
+            raise ValueError("Enter a valid city name")
+
+        response_wa = requests.get(f'http://api.weatherapi.com/v1/current.json?key={api_key_wa}&q={location}&aqi=no')
+        data_wa = response_wa.json()
+
+        if data_owm['cod'] != 200:
+            raise ValueError("Enter a valid city name")
+
+        owm = data_owm["main"]["temp"]
+        wa = data_wa["current"]["temp_c"]
+        difference = round(abs(owm - wa), 2)
+        avg = round((owm + wa) / 2, 2)
+        return render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg, location=location)
+    except Exception as error:
+        return render_template('index.html', error_message=error)
