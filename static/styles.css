@@ -34,11 +34,36 @@ body {
   text-shadow: 1px 1px 1px black;
 }
 
-.weather p {
+/*.weather p {
   font-size: x-large;
   font-weight: bold;
 }
 
 .weather li {
   padding: 0.2em;
+}*/
+
+.weather-info {
+  display: grid;
+  grid-template-areas: 
+    "desc info"
+    "desc info"
+    "desc info"
+    "desc info";
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.current-temp {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.weather-info > div.desc {
+  grid-area: desc;
+}
+
+.weather-info > div.info {
+  grid-area: info;
+  justify-self: end;
 }

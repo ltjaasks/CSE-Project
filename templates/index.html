@@ -12,15 +12,21 @@
       <button class="submit" type="submit">Search</button>
     </form>
     <p class="error-message">{{ error_message }}</p>
-    {% if location %}
-    <div class="weather">
-      <p>Current temperature comparison for {{ location }}</p>
-      <ul class="weather-info">
-        <li>OpenWeatherMap temperature: {{ owm }}°C</li>
-        <li>WeatherAPI temperature: {{ wa }}°C</li>
-        <li>Temperature difference: {{ difference }}°C</li>
-        <li>Average temperature: {{ avg }}°C</li>
-      </ul>
+    {% if location_wa %}
+    <p class="current-temp">Current temperature comparison for {{ location_wa }}</p>
+    <div class="weather-info">
+      <div class="desc">
+        <p>OpenWeatherMap temperature:</p>
+        <p>WeatherAPI temperature:</p>
+        <p>Temperature difference:</p>
+        <p>Average temperature:</p>
+      </div>
+      <div class="info">
+        <p>{{ owm }}°C ({{ location_owm }})</p>
+        <p>{{ wa }}°C ({{ location_wa }})</p>
+        <p>{{ difference }}°C</p>
+        <p>{{ avg }}°C</p>
+      </div>
     </div>
     {% endif %}
   </body>
