@@ -8,7 +8,7 @@
     <h1 class="header">Weather API comparator</h1>
     <p>Enter the location to compare current weather data from OpenWeatherMap and WeatherAPI</p>
     <form class="location-form" action="/" method="POST">
-      <input class="location" type="text" name="location" placeholder="Enter the location" />
+      <input class="location" type="text" name="location" placeholder="Enter a location" value="{{ placeholder }}"/>
       <button class="submit" type="submit">Search</button>
     </form>
     <p class="error-message">{{ error_message }}</p>
