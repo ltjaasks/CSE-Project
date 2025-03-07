@@ -1,35 +1,44 @@
 body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   background-color: lightblue;
+  font-size: larger;
+  font-family: lufga, sans-serif;
 }
 
-.header{
-  margin: 0.5em 0.5em 0.5em 0;
+.header {
+  font-size: 4em;
+  margin: 0.5em 0 0.5em 0;
+}
+
+.location {
+  width: 250px;
+  height: 40px;
+  border-radius: 8px;
+  font-size: large;
+}
+
+.submit {
+  width: fit-content;
+  height: 40px;
+  padding: 5px;
+  margin: 5px;
+  font-size: large;
 }
 
 .error-message {
   color: red;
-  font-size: medium;
-  text-shadow: 0 0 1px black;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px black;
 }
 
 .weather p {
-  margin-left: 0.5em;
+  font-size: x-large;
   font-weight: bold;
 }
 
 .weather li {
-  margin-left: 0.5em;
   padding: 0.2em;
-}
-
-.weather-info {
-  margin-left: 0.5em;
-}
-
-.location-form {
-  margin-left: 0.5em;
-}
-
-.error-message {
-  margin-left: 0.5em;
 }
