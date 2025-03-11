@@ -51,8 +51,8 @@ def showTemperatures():
         elif response_owm.status_code != 200 or response_wa.status_code != 200:
             raise ValueError("Enter a valid city name")
         
-        location_wa = f"{data_wa["location"]["name"]}, {data_wa["location"]["country"]}"
-        location_owm = f"{data_owm["name"]}, {data_owm["sys"]["country"]}"
+        location_wa = f"{data_wa['location']['name']}, {data_wa['location']['country']}"
+        location_owm = f"{data_owm['name']}, {data_owm['sys']['country']}"
 
         difference = round(abs(owm - wa), 2)
         avg = round((owm + wa) / 2, 2)
