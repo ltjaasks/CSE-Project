@@ -30,12 +30,20 @@ def showTemperatures():
         location = request.form['location'].strip(" ")
         print(location)
         owm = get_temperature_from_api(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric')
-
         wa = get_temperature_from_api(f'http://api.weatherapi.com/v1/current.json?key={api_key_wa}&q={location}&aqi=no')
+        #response_owm = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric')
+        #data_owm = response_owm.json()
+        #response_wa = requests.get(f'http://api.weatherapi.com/v1/current.json?key={api_key_wa}&q={location}&aqi=no')
+        #data_wa = response_wa.json()
+
+        #if response_owm.status_code == 401 or response_wa.status_code == 401:
+        #    raise ValueError("Invalid API key")
+        #elif response_owm.status_code != 200 or response_wa.status_code != 200:
+        #    raise ValueError("Enter a valid city name")
 
         difference = round(abs(owm - wa), 2)
         avg = round((owm + wa) / 2, 2)
-        return render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg, location=location.capitalize(), placeholder=location)
+        return render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg, location_wa=location, location_owm=location, placeholder=location)
     except Exception as error:
         return render_template('index.html', error_message=error)
     
