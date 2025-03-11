@@ -5,28 +5,25 @@ import os
 
 load_dotenv()
 
-print("No api keys yet")
-
 api_key_owm = os.getenv("OWM_API_KEY")
 api_key_wa = os.getenv("WA_API_KEY")
 
-print(api_key_owm, api_key_wa)
 
 app = Flask(__name__)
 
 @app.route('/')
 def hello():
     try:
-        print("Api keys in /: ", api_key_owm, api_key_wa)
+        print("Api keys in /: ", api_key_owm[0:5], api_key_wa[0:5])
         if not api_key_owm or api_key_owm == None:
             raise NameError("Error: API key not found. Set OWM_API_KEY in your .env file.")
-        elif not api_key_wa:
+        elif not api_key_wa or api_key_wa == None:
             raise NameError("Error: API key not found. Set WA_API_KEY in your .env file.")
         response = make_response(render_template('index.html'), 200)
         response.mimetype = 'text/html' 
         return response
     except Exception as error:
-        print(error)
+        print("Error: ", error)
         response = make_response(render_template('index.html', error_message=error), 404)
         response.mimetype = 'text/html'
         return response
@@ -54,9 +51,13 @@ def showTemperatures():
 
         difference = round(abs(owm - wa), 2)
         avg = round((owm + wa) / 2, 2)
-        return render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg, location_wa=location_wa, location_owm=location_owm, placeholder=location)
+        response = make_response(render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg, location_wa=location_wa, location_owm=location_owm, placeholder=location), 200)
+        response.mimetype = 'text/html'
+        return response
     except Exception as error:
-        return render_template('index.html', error_message=error)
+        response = make_response(render_template('index.html', error_message=error, placeholder=location), 404)
+        response.mimetype = 'text/html'
+        return response
     
 
 def get_temperature_from_api(api_url):

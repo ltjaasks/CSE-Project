@@ -73,7 +73,8 @@ def test_data_is_updated_on_page_after_successful_api_call():
 
 def test_landing_page_returns_error_if_owm_api_key_not_found():
     with app.test_client() as client:
-        app.api_key_owm = None
+        app.api_key_owm = os.getenv("OWM")
+        print("OWM-key", app.api_key_owm)
         response = client.get('/')
         assert response.status_code == 404
         assert b"Error: API key not found. Set OWM_API_KEY in your .env file." in response.data
@@ -81,7 +82,7 @@ def test_landing_page_returns_error_if_owm_api_key_not_found():
 
 def test_landing_page_returns_error_if_wa_api_key_not_found():
     with app.test_client() as client:
-        app.api_key_owm = os.getenv("OWM_API_KE")
+        app.api_key_wa = os.getenv("WA")
         response = client.get('/')
         assert response.status_code == 404
         assert b"Error: API key not found. Set WA_API_KEY in your .env file." in response.data
