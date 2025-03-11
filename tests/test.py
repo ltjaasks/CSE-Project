@@ -56,4 +56,3 @@ def test_landing_page_returns_error_if_wa_api_key_not_found():
         response = client.get('/')
         assert response.status_code == 404
         assert b"Error: API key not found. Set WA_API_KEY in your .env file." in response.data
->>>>>>> 15bdfb15daeedb8746f88e4c6c76ed03518d324a
