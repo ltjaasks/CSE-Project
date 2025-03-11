@@ -10,7 +10,6 @@ api_key_wa = os.getenv("WA_API_KEY")
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def hello():
     try:
@@ -28,7 +27,7 @@ def hello():
 @app.route('/', methods=['POST'])
 def showTemperatures():
     try:
-        location = request.form['location'].capitalize().strip(" ")
+        location = request.form['location'].strip(" ")
         print(location)
         owm = get_temperature_from_api(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric')
 
@@ -36,7 +35,7 @@ def showTemperatures():
 
         difference = round(abs(owm - wa), 2)
         avg = round((owm + wa) / 2, 2)
-        return render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg, location=location)
+        return render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg, location=location.capitalize(), placeholder=location)
     except Exception as error:
         return render_template('index.html', error_message=error)
     
