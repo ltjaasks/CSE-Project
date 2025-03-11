@@ -21,9 +21,38 @@ def test_landing_page_returns_200_and_placeholder_found_from_response():
         assert response.status_code == 200
         assert b"Enter a location" in response.data
 
+def test_error_is_raised_and_weather_info_not_returned_if_invalid_city_name():
+    with app.test_client() as client:
+        response = client.post('/', data={'location': 'fakeCityName'})
+        assert response.status_code == 404
+        assert b"Enter a valid city name" in response.data
+
+def test_data_is_updated_on_page_after_successful_api_call():
+    mock_owm_response = {
+        "main": {
+            "temp": 10
+        },
+        "name": "London",
+        "sys": {
+            "country": "GB"
+        }
+    }
+
+    mock_wa_response = {
+        "current": {
+            "temp_c": 12
+        },
+        "location": {
+            "name": "London",
+            "country": "GB"
+        }
+    }
+
+    sample_api_response = {}
+
 def test_landing_page_returns_error_if_owm_api_key_not_found():
     with app.test_client() as client:
-        app.api_key_owm = os.getenv("OWM_API_KE")
+        app.api_key_owm = None
         response = client.get('/')
         assert response.status_code == 404
         assert b"Error: API key not found. Set OWM_API_KEY in your .env file." in response.data

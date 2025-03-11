@@ -5,20 +5,28 @@ import os
 
 load_dotenv()
 
+print("No api keys yet")
+
 api_key_owm = os.getenv("OWM_API_KEY")
 api_key_wa = os.getenv("WA_API_KEY")
+
+print(api_key_owm, api_key_wa)
 
 app = Flask(__name__)
 
 @app.route('/')
 def hello():
     try:
-        if not api_key_owm:
-            raise ValueError("Error: API key not found. Set OWM_API_KEY in your .env file.")
+        print("Api keys in /: ", api_key_owm, api_key_wa)
+        if not api_key_owm or api_key_owm == None:
+            raise NameError("Error: API key not found. Set OWM_API_KEY in your .env file.")
         elif not api_key_wa:
-            raise ValueError("Error: API key not found. Set WA_API_KEY in your .env file.")
-        return render_template('index.html')
+            raise NameError("Error: API key not found. Set WA_API_KEY in your .env file.")
+        response = make_response(render_template('index.html'), 200)
+        response.mimetype = 'text/html' 
+        return response
     except Exception as error:
+        print(error)
         response = make_response(render_template('index.html', error_message=error), 404)
         response.mimetype = 'text/html' 
         return response
@@ -46,6 +54,10 @@ def showTemperatures():
         wa = data_wa["current"]["temp_c"]
         difference = round(abs(owm - wa), 2)
         avg = round((owm + wa) / 2, 2)
-        return render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg, location_wa=location_wa, location_owm=location_owm, placeholder=location)
+        response = make_response(render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg, location_wa=location_wa, location_owm=location_owm, placeholder=location), 200)
+        response.mimetype = 'text/html' 
+        return response
     except Exception as error:
-        return render_template('index.html', error_message=error, placeholder=location)
+        response = make_response(render_template('index.html', error_message=error, placeholder=location), 404)
+        response.mimetype = 'text/html' 
+        return response
