@@ -35,7 +35,7 @@ jobs:
     #Tests not made yet, uncomment when made
     - name: Test with pytest
       run: |
-        pytest
+        pytest tests/test.py
   docker-image:
     needs: [build]
     runs-on: ubuntu-latest

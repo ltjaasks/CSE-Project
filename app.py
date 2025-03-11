@@ -28,7 +28,7 @@ def hello():
     except Exception as error:
         print(error)
         response = make_response(render_template('index.html', error_message=error), 404)
-        response.mimetype = 'text/html' 
+        response.mimetype = 'text/html'
         return response
 
 
@@ -36,28 +36,32 @@ def hello():
 def showTemperatures():
     try:
         location = request.form['location'].strip(" ")
-        response_owm = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric')
-        data_owm = response_owm.json()
-        print(data_owm)
-        response_wa = requests.get(f'http://api.weatherapi.com/v1/current.json?key={api_key_wa}&q={location}&aqi=no')
-        data_wa = response_wa.json()
+        print(location)
+        owm = get_temperature_from_api(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric')
+        wa = get_temperature_from_api(f'http://api.weatherapi.com/v1/current.json?key={api_key_wa}&q={location}&aqi=no')
+        #response_owm = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric')
+        #data_owm = response_owm.json()
+        #response_wa = requests.get(f'http://api.weatherapi.com/v1/current.json?key={api_key_wa}&q={location}&aqi=no')
+        #data_wa = response_wa.json()
 
-        if response_owm.status_code == 401 or response_wa.status_code == 401:
-            raise ValueError("Invalid API key")
-        elif response_owm.status_code != 200 or response_wa.status_code != 200:
-            raise ValueError("Enter a valid city name")
-        
-        location_wa = f"{data_wa["location"]["name"]}, {data_wa["location"]["country"]}"
-        location_owm = f"{data_owm["name"]}, {data_owm["sys"]["country"]}"
+        #if response_owm.status_code == 401 or response_wa.status_code == 401:
+        #    raise ValueError("Invalid API key")
+        #elif response_owm.status_code != 200 or response_wa.status_code != 200:
+        #    raise ValueError("Enter a valid city name")
 
-        owm = data_owm["main"]["temp"]
-        wa = data_wa["current"]["temp_c"]
         difference = round(abs(owm - wa), 2)
         avg = round((owm + wa) / 2, 2)
-        response = make_response(render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg, location_wa=location_wa, location_owm=location_owm, placeholder=location), 200)
-        response.mimetype = 'text/html' 
-        return response
+        return render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg, location_wa=location_wa, location_owm=location_owm, placeholder=location)
     except Exception as error:
-        response = make_response(render_template('index.html', error_message=error, placeholder=location), 404)
-        response.mimetype = 'text/html' 
-        return response
+        return render_template('index.html', error_message=error)
+    
+
+def get_temperature_from_api(api_url):
+    response = requests.get(api_url)
+    data = response.json()
+    if response.status_code != 200:
+        raise ValueError("Enter a valid city name")
+    if "main" in data and "temp" in data["main"]:
+        return data["main"]["temp"]
+    elif "current" in data and "temp_c" in data["current"]:
+        return data["current"]["temp_c"]
