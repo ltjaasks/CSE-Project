@@ -5,8 +5,11 @@ import os
 
 load_dotenv()
 
-api_key_owm = os.getenv("OWM_API_KEY")
-api_key_wa = os.getenv("WA_API_KEY")
+
+def get_api_keys():
+    api_key_owm = os.getenv("OWM_API_KEY")
+    api_key_wa = os.getenv("WA_API_KEY")
+    return api_key_owm, api_key_wa
 
 
 app = Flask(__name__)
@@ -14,6 +17,7 @@ app = Flask(__name__)
 @app.route('/')
 def hello():
     try:
+        api_key_owm, api_key_wa = get_api_keys()
         print("Api keys in /: ", api_key_owm[0:5], api_key_wa[0:5])
         if not api_key_owm or api_key_owm == None:
             raise NameError("Error: API key not found. Set OWM_API_KEY in your .env file.")
@@ -32,6 +36,7 @@ def hello():
 @app.route('/', methods=['POST'])
 def showTemperatures():
     try:
+        api_key_owm, api_key_wa = get_api_keys()
         location = request.form['location'].strip(" ")
         print(location)
         owm = get_temperature_from_api(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric')
