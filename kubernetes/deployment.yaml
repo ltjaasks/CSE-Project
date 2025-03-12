@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cse-project
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cse-project
+  template:
+    metadata:
+      labels:
+        app: cse-project
+    spec:
+      containers:
+      - name: cse-project
+        image: ltjaasks/cse-project:latest
+        ports:
+        - containerPort: 8080
