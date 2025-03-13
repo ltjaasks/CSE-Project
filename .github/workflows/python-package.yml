@@ -13,6 +13,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
+      WA_API_KEY: ${{ secrets.WA_API_KEY }}
 
     steps:
     - name: Checkout repository
