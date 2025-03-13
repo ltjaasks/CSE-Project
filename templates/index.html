@@ -12,8 +12,9 @@
       <button class="submit" type="submit">Search</button>
     </form>
     <p class="error-message">{{ error_message }}</p>
-    {% if location_wa %}
-    <p class="current-temp">Current temperature comparison for {{ location_wa }}</p>
+    {% if wa_location %}
+    {{ note }}
+    <p class="current-temp">Current temperature comparison for {{ wa_location }}</p>
     <div class="weather-info">
       <div class="desc">
         <p>OpenWeatherMap temperature:</p>
@@ -22,8 +23,8 @@
         <p>Average temperature:</p>
       </div>
       <div class="info">
-        <p>{{ owm }}°C ({{ location_owm }})</p>
-        <p>{{ wa }}°C ({{ location_wa }})</p>
+        <p>{{ owm }}°C ({{ owm_location }})</p>
+        <p>{{ wa }}°C ({{ wa_location }})</p>
         <p>{{ difference }}°C</p>
         <p>{{ avg }}°C</p>
       </div>

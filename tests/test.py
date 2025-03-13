@@ -29,6 +29,7 @@ def test_landing_page_returns_200_and_placeholder_found_from_response():
         assert b"Enter a location" in response.data
 
 
+# Error tests
 @patch('requests.get')
 def test_invalid_city_name_raises_value_error(mock_get):
     mock_response = mock_get.return_value
@@ -49,6 +50,27 @@ def test_error_is_raised_and_weather_info_not_returned_if_invalid_city_name():
         response = client.post('/', data={'location': 'fakeCityName'})
         assert response.status_code == 404
         assert b"Enter a valid city name" in response.data
+
+
+# API tests
+def test_landing_page_returns_error_if_owm_api_key_not_found(monkeypatch: pytest.MonkeyPatch):
+    def get_api_keys(): return None, os.getenv("WA_API_KEY")
+    monkeypatch.setattr("app.get_api_keys", get_api_keys)
+    with app.test_client() as client:
+        app.api_key_owm = os.getenv("OWM")
+        print("OWM-key", app.api_key_owm)
+        response = client.get('/')
+        assert response.status_code == 404
+
+
+def test_landing_page_returns_error_if_wa_api_key_not_found(monkeypatch: pytest.MonkeyPatch):
+    def get_api_keys(): return os.getenv("OWM_API_KEY"), None
+    monkeypatch.setattr("app.get_api_keys", get_api_keys)
+    with app.test_client() as client:
+        app.api_key_wa = os.getenv("WA")
+        response = client.get('/')
+        assert response.status_code == 404
+
 
 def test_data_is_updated_on_page_after_successful_api_call():
     mock_owm_response = {
@@ -72,21 +94,3 @@ def test_data_is_updated_on_page_after_successful_api_call():
     }
 
     sample_api_response = {}
-
-def test_landing_page_returns_error_if_owm_api_key_not_found(monkeypatch: pytest.MonkeyPatch):
-    def get_api_keys(): return None, None
-    monkeypatch.setattr("app.get_api_keys", get_api_keys)
-    with app.test_client() as client:
-        app.api_key_owm = os.getenv("OWM")
-        print("OWM-key", app.api_key_owm)
-        response = client.get('/')
-        assert response.status_code == 404
-
-
-def test_landing_page_returns_error_if_wa_api_key_not_found(monkeypatch: pytest.MonkeyPatch):
-    def get_api_keys(): return None, None
-    monkeypatch.setattr("app.get_api_keys", get_api_keys)
-    with app.test_client() as client:
-        app.api_key_wa = os.getenv("WA")
-        response = client.get('/')
-        assert response.status_code == 404

@@ -51,7 +51,7 @@ body {
     "desc info"
     "desc info";
   grid-template-columns: 1fr 1fr;
-  gap: 0;
+  gap: 1em;
 }
 
 .current-temp {

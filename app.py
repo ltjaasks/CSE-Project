@@ -3,31 +3,32 @@ import requests
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+load_dotenv() # Load dotenv file
+app = Flask(__name__) # Initialize Flask app
 
 
 def get_api_keys():
-    api_key_owm = os.getenv("OWM_API_KEY")
-    api_key_wa = os.getenv("WA_API_KEY")
-    return api_key_owm, api_key_wa
+    api_key_owm = os.getenv("OWM_API_KEY") # Get OWM API key from .env file
+    api_key_wa = os.getenv("WA_API_KEY") # Get WA API key from .env file
+    return api_key_owm, api_key_wa # Return API keys
 
 
-app = Flask(__name__)
-
+# Initalize the front page
 @app.route('/')
 def hello():
     try:
-        api_key_owm, api_key_wa = get_api_keys()
-        print("Api keys in /: ", api_key_owm[0:5], api_key_wa[0:5])
+        api_key_owm, api_key_wa = get_api_keys() # Get API keys from function
+        # Handling cases where API keys are not found
         if not api_key_owm or api_key_owm == None:
             raise NameError("Error: API key not found. Set OWM_API_KEY in your .env file.")
         elif not api_key_wa or api_key_wa == None:
             raise NameError("Error: API key not found. Set WA_API_KEY in your .env file.")
-        response = make_response(render_template('index.html'), 200)
-        response.mimetype = 'text/html' 
+        response = make_response(render_template('index.html'), 200) # Make response object
+        response.mimetype = 'text/html' # Set mimetype for the response
         return response
     except Exception as error:
         print("Error: ", error)
+        # Error handling, here we return the error message and HTTP code
         response = make_response(render_template('index.html', error_message=error), 404)
         response.mimetype = 'text/html'
         return response
@@ -39,38 +40,49 @@ def showTemperatures():
         api_key_owm, api_key_wa = get_api_keys()
         location = request.form['location'].strip(" ")
         print(location)
-        owm = get_temperature_from_api(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric')
-        wa = get_temperature_from_api(f'http://api.weatherapi.com/v1/current.json?key={api_key_wa}&q={location}&aqi=no')
-        response_owm = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric')
-        data_owm = response_owm.json()
-        response_wa = requests.get(f'http://api.weatherapi.com/v1/current.json?key={api_key_wa}&q={location}&aqi=no')
-        data_wa = response_wa.json()
+        owm = get_temperature_from_api(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric', location)
+        wa = get_temperature_from_api(f'http://api.weatherapi.com/v1/current.json?key={api_key_wa}&q={location}&aqi=no', location)
 
-        if response_owm.status_code == 401 or response_wa.status_code == 401:
-            raise ValueError("Invalid API key")
-        elif response_owm.status_code != 200 or response_wa.status_code != 200:
-            raise ValueError("Enter a valid city name")
+        if type(owm) == ValueError:
+            raise owm
+        elif type(wa) == ValueError:
+            raise wa
         
-        location_wa = f"{data_wa['location']['name']}, {data_wa['location']['country']}"
-        location_owm = f"{data_owm['name']}, {data_owm['sys']['country']}"
+        owm_temp = owm["main"]["temp"]
+        wa_temp = wa["current"]["temp_c"]
+        owm_location = f"{owm['name']}, {owm['sys']['country']}"
+        wa_location = f"{wa['location']['name']}, {wa['location']['country']}"
 
-        difference = round(abs(owm - wa), 2)
-        avg = round((owm + wa) / 2, 2)
-        response = make_response(render_template('index.html', owm=owm, wa=wa, difference=difference, avg=avg, location_wa=location_wa, location_owm=location_owm, placeholder=location), 200)
+        print(owm["name"], wa["location"]["name"], type(owm["name"]), type(wa["location"]["name"])) 
+        if owm["name"].lower() != wa["location"]["name"].lower():
+            print("Different countries")
+            note = "Note, the APIs requested the weather data from different countries that have the same city name."
+        else:
+            note = ""
+
+        difference = round(abs(owm_temp - wa_temp), 2)
+        avg = round((owm_temp + wa_temp) / 2, 2)
+        response = make_response(render_template('index.html', owm=owm_temp, wa=wa_temp, owm_location=owm_location, wa_location=wa_location, difference=difference, avg=avg, placeholder=location, note=note), 200)
         response.mimetype = 'text/html'
         return response
     except Exception as error:
+        print("Error: ", error)
         response = make_response(render_template('index.html', error_message=error, placeholder=location), 404)
         response.mimetype = 'text/html'
         return response
     
 
-def get_temperature_from_api(api_url):
-    response = requests.get(api_url)
-    data = response.json()
-    if response.status_code != 200:
-        raise ValueError("Enter a valid city name")
-    if "main" in data and "temp" in data["main"]:
-        return data["main"]["temp"]
-    elif "current" in data and "temp_c" in data["current"]:
-        return data["current"]["temp_c"]
+# Function to get temperature from API
+# Arguments: API URL, location
+# Returns: JSON data from API or error
+def get_temperature_from_api(api_url, location):
+    try: 
+        response = requests.get(api_url, timeout=5)
+        data = response.json()
+        if response.status_code == 401 or response.status_code == 401:
+            raise ValueError("Invalid API key")
+        elif response.status_code != 200:
+            raise ValueError("Enter a valid city name")
+        return data
+    except Exception as error:
+        return error
