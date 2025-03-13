@@ -3,19 +3,6 @@ from app import app, get_temperature_from_api
 import requests
 import requests_mock
 from unittest.mock import patch
-# What to test:
-# 1. Error cases
-#   - API keys not found
-#   - Invalid city name
-# 2. API calls
-#    - return correct data
-# 3. UI
-# 4. Input
-# 5. Output
-# API keys
-# / return HTTP 200
-
-import pytest
 import os
 
 from app import app

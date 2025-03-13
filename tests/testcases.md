@@ -15,3 +15,9 @@
 2. Error messages are shown in error cases (Found in the rendered html)
 3. Internal Server Error doesn't occur (check this in every error case)
 4. The text entered in the form is still visible in the input field after error (found in the html)
+
+## User input
+1. HTML code as input is not interpret as html but as string
+2. Incorrect input returns and shows error
+3. Correct city name returns the weather for given city
+4. 
