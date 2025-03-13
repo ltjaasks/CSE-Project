@@ -18,7 +18,6 @@ app = Flask(__name__)
 def hello():
     try:
         api_key_owm, api_key_wa = get_api_keys()
-        print("Api keys in /: ", api_key_owm[0:5], api_key_wa[0:5])
         if not api_key_owm or api_key_owm == None:
             raise NameError("Error: API key not found. Set OWM_API_KEY in your .env file.")
         elif not api_key_wa or api_key_wa == None:
