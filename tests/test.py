@@ -38,11 +38,9 @@ def test_invalid_city_name_raises_value_error(mock_get):
         "cod":"404",
         "message":"city not found"
         }
-    
-    url = 'http://example.com/api'
 
-    with pytest.raises(ValueError):
-        get_temperature_from_api(url)
+    with pytest.raises(ValueError, match="Enter a valid city name"):
+        get_temperature_from_api('http://example.com/api')
 
 
 def test_error_is_raised_and_weather_info_not_returned_if_invalid_city_name():

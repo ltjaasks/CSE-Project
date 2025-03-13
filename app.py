@@ -42,31 +42,27 @@ def showTemperatures():
         print(location)
         owm = get_temperature_from_api(f'https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key_owm}&units=metric', location)
         wa = get_temperature_from_api(f'http://api.weatherapi.com/v1/current.json?key={api_key_wa}&q={location}&aqi=no', location)
-
-        if type(owm) == ValueError:
-            raise owm
-        elif type(wa) == ValueError:
-            raise wa
         
-        owm_temp = owm["main"]["temp"]
-        wa_temp = wa["current"]["temp_c"]
-        owm_location = f"{owm['name']}, {owm['sys']['country']}"
-        wa_location = f"{wa['location']['name']}, {wa['location']['country']}"
+        owm_temp = owm["main"]["temp"] # Set OWM API temperature
+        wa_temp = wa["current"]["temp_c"] # Set WA API temperature
+        owm_location = f"{owm['name']}, {owm['sys']['country']}" # Set OWM API location (city, country)
+        wa_location = f"{wa['location']['name']}, {wa['location']['country']}" # Set WA API location (city, country)
 
-        print(owm["name"], wa["location"]["name"], type(owm["name"]), type(wa["location"]["name"])) 
+        # If APIs return data from different countries, show a note for the user
         if owm["name"].lower() != wa["location"]["name"].lower():
             print("Different countries")
             note = "Note, the APIs requested the weather data from different countries that have the same city name."
         else:
             note = ""
 
-        difference = round(abs(owm_temp - wa_temp), 2)
-        avg = round((owm_temp + wa_temp) / 2, 2)
+        difference = round(abs(owm_temp - wa_temp), 2) # Calculate the difference between the two temperatures
+        avg = round((owm_temp + wa_temp) / 2, 2) # Calculate the average temperature
+        # Make response object with the data
         response = make_response(render_template('index.html', owm=owm_temp, wa=wa_temp, owm_location=owm_location, wa_location=wa_location, difference=difference, avg=avg, placeholder=location, note=note), 200)
-        response.mimetype = 'text/html'
+        response.mimetype = 'text/html' # Set mimetype for the response
         return response
     except Exception as error:
-        print("Error: ", error)
+        # Error handling: if an error raises, return the error message and HTTP code
         response = make_response(render_template('index.html', error_message=error, placeholder=location), 404)
         response.mimetype = 'text/html'
         return response
@@ -75,14 +71,15 @@ def showTemperatures():
 # Function to get temperature from API
 # Arguments: API URL, location
 # Returns: JSON data from API or error
-def get_temperature_from_api(api_url, location):
+def get_temperature_from_api(api_url, location = None):
     try: 
-        response = requests.get(api_url, timeout=5)
-        data = response.json()
-        if response.status_code == 401 or response.status_code == 401:
+        response = requests.get(api_url, timeout=5) # Make a GET request to the API
+        data = response.json() # Convert response to JSON
+        # Error handlings
+        if response.status_code == 401 or response.status_code == 401: # If API key is invalid
             raise ValueError("Invalid API key")
         elif response.status_code != 200:
-            raise ValueError("Enter a valid city name")
+            raise ValueError("Enter a valid city name") # If city name is invalid
         return data
     except Exception as error:
-        return error
+        raise error
