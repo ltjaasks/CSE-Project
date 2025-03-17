@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, make_response
 import requests
 from dotenv import load_dotenv
 import os
+import math
 
 load_dotenv() # Load dotenv file
 app = Flask(__name__) # Initialize Flask app
@@ -48,10 +49,10 @@ def showTemperatures():
         owm_location = f"{owm['name']}, {owm['sys']['country']}" # Set OWM API location (city, country)
         wa_location = f"{wa['location']['name']}, {wa['location']['country']}" # Set WA API location (city, country)
 
-        # If APIs return data from different countries, show a note for the user
-        if owm["name"].lower() != wa["location"]["name"].lower():
-            print("Different countries")
-            note = "Note, the APIs requested the weather data from different countries that have the same city name."
+        # If APIs return data (probably) from different cities, show a note for the user
+        if not math.isclose(owm_temp, wa_temp, abs_tol=0.5):
+            print("Different cities")
+            note = "Note, the APIs probably requested the weather data from different cities"
         else:
             note = ""
 
