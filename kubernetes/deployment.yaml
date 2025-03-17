@@ -3,17 +3,29 @@ kind: Deployment
 metadata:
   name: cse-project
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: cse-project
+  replicas: 2
   template:
     metadata:
       labels:
         app: cse-project
     spec:
       containers:
-      - name: cse-project
-        image: ltjaasks/cse-project:latest
-        ports:
-        - containerPort: 8080
+        - name: cse-project
+          image: ltjaasks/cse-project:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: OWM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: OWM_API_KEY
+            - name: WA_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: WA_API_KEY
