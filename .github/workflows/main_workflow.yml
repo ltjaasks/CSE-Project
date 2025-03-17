@@ -85,3 +85,28 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ vars.DOCKER_USERNAME }}/cse-project:latest
+
+
+  minikube-deployment:
+    needs: [docker-image]
+    runs-on: ubuntu-latest
+    name: deploy to minikube
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ltjaasks/cse-project
+      - name: Start minikube
+        uses: medyagh/setup-minikube@latest
+      - name: Try the cluster
+        run: kubectl get pods -A
+      - name: Deploy
+        run: |
+          kubectl apply -f kubernetes/deployment.yaml
+          kubectl apply -f kubernetes/service.yaml
+          kubectl wait --for=condition=ready pod -l app=cse-project
+      - name: Test service urls
+        run: |
+          minikube service list
+          minikube service cse-project-service --url
+          echo "------------------opening the service------------------"
+          curl $(minikube service cse-project-service --url)
