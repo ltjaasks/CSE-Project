@@ -5,12 +5,12 @@ metadata:
 spec:
   selector:
     matchLabels:
-      run: cse-project
+      app: cse-project
   replicas: 2
   template:
     metadata:
       labels:
-        run: cse-project
+        app: cse-project
     spec:
       containers:
         - name: cse-project
