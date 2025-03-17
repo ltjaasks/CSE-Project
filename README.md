@@ -26,3 +26,6 @@ The project can be run locally:
 WA_API_KEY=your personal API key</code></pre>
 12. Run the application from terminal by writing <pre><code>flask run</code></pre>
 13. Open browser and locate to the address shown in the terminal (typically 127.0.0.1:5000/)
+<br>
+
+The tests can be run in terminal in the project folder with <pre><code>pytest tests/</code></pre> 
