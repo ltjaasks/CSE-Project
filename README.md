@@ -10,7 +10,7 @@ Tech Stack:
 - Kubernetes (Deployment of the application)
 - Python 3.10+ (Programming language)
 - Pytest (Test runner & testing framework for Python)
-- Pytest-BDD (For writing BDD tests)
+- Pytest-BDD (BDD framework for Pytest)
 
 
 The project can be run locally:
