@@ -18,3 +18,14 @@ spec:
           ports:
             - containerPort: 8080
               protocol: TCP
+          env:
+            - name: OWM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: OWM_API_KEY
+            - name: WA_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: WA_API_KEY
