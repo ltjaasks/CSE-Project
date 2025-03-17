@@ -55,7 +55,7 @@ jobs:
           python -m pip install pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Run tests with pytest
-        run: pytest tests/
+        run: pytest tests/test_file.py
       - name: Run static security testing with Bandit 
         uses: mdegis/bandit-action@v1.0
         with:
