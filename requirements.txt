@@ -4,3 +4,4 @@ dotenv
 pytest
 requests-mock
 pytest-bdd
+splinter
