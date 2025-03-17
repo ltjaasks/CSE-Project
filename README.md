@@ -1,6 +1,17 @@
 <h1>CSE Course Project</h1>
 
-This is a course project for the course TJTS5901 Continuous Software Engineering. The implemented project is a simple web application made with Python's Flask library. The application fetches current Weather data from two Weather APIs with given city and then compares them (difference and average). 
+This is a course project for the course TJTS5901 Continuous Software Engineering. The implemented project is a simple web application made with Python's Flask library. The application fetches current Weather data from two Weather APIs with given city and then compares them (difference and average). <br><br>
+Tech Stack:
+- Bandit (Security of the code)
+- Docker (Containerization of the application)
+- Flask (WSGI web application framework for Python)
+- Github Actions (CI/CD pipeline)
+- Git & Github (Version control)
+- Kubernetes (Deployment of the application)
+- Python 3.10+ (Programming language)
+- Pytest (Test runner & testing framework for Python)
+- Pytest-BDD (For writing BDD tests)
+
 
 The project can be run locally:
 1. Open Terminal (Command line, Bash etc. depending which system you are using)
