@@ -55,27 +55,3 @@ def test_landing_page_returns_error_if_wa_api_key_not_found(monkeypatch: pytest.
         app.api_key_wa = os.getenv("WA")
         response = client.get('/')
         assert response.status_code == 404
-
-
-def test_data_is_updated_on_page_after_successful_api_call():
-    mock_owm_response = {
-        "main": {
-            "temp": 10
-        },
-        "name": "London",
-        "sys": {
-            "country": "GB"
-        }
-    }
-
-    mock_wa_response = {
-        "current": {
-            "temp_c": 12
-        },
-        "location": {
-            "name": "London",
-            "country": "GB"
-        }
-    }
-
-    sample_api_response = {}
