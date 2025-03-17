@@ -9,7 +9,7 @@ Tech Stack:
 - Git & Github (Version control)
 - Kubernetes (Deployment of the application)
 - Minikube (Local Kubernetes)
-- Python 3.10+ (Programming language)
+- Python 3.11+ (Programming language)
 - Pytest (Test runner & testing framework for Python)
 - Pytest-BDD (BDD framework for Pytest)
 
