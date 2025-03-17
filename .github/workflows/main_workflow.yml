@@ -103,7 +103,7 @@ jobs:
         run: |
           kubectl apply -f kubernetes/deployment.yaml
           kubectl apply -f kubernetes/service.yaml
-          kubectl create secret generic api-secrets --from-literal=OWM_API_KEY=mock_apikey --from-literal=WA_API_KEY=mock_apikey
+          kubectl create secret generic api-secrets --from-literal=OWM_API_KEY=${{ secrets.OWM_API_KEY }} --from-literal=WA_API_KEY=${{ secrets.WA_API_KEY }}
           kubectl wait --for=condition=ready pod -l app=cse-project
       - name: Test service urls
         run: |
