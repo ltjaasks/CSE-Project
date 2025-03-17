@@ -57,9 +57,9 @@ jobs:
       - name: Run tests with pytest
         run: pytest tests/test.py
       - name: Run static security testing with Bandit 
-        uses: mdegis/bandit-action@v1.0
+        uses: shundor/bandit-action@v1.0
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           path: "."
           level: high
           confidence: high
