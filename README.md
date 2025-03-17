@@ -8,6 +8,7 @@ Tech Stack:
 - Github Actions (CI/CD pipeline)
 - Git & Github (Version control)
 - Kubernetes (Deployment of the application)
+- Minikube (Local Kubernetes)
 - Python 3.10+ (Programming language)
 - Pytest (Test runner & testing framework for Python)
 - Pytest-BDD (BDD framework for Pytest)
@@ -27,6 +28,3 @@ The project can be run locally:
 9. Run the application from terminal by writing **flask --app app.py run**
 10. Open browser and locate to the address shown in the terminal (typically 127.0.0.1:5000/)
 11. Use the application
-
-Instructions for running tests and Bandit:
-TODO
