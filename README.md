@@ -4,7 +4,7 @@ This is a course project for the course TJTS5901 Continuous Software Engineering
 
 The project can be run locally:
 1. Open Terminal (Command line, Bash etc. depending which system you are using)
-2. Make sure you have Git installed on your device and clone the project to your device with git clone <url>. Move to the project folder with cd command.
+2. Make sure you have Git installed on your device and clone the project to your device with git clone https://github.com/ltjaasks/CSE-Project.git. Move to the project folder with cd command.
 3. Make sure you have Python 3.10+ installed on your device (you can test it by writing python --version in the console)
 4. Initialize virtual environment (unless you want to install every package in your device) by writing virtualenv venv
 5. Activate virtual environment by writing .\venv\Scripts\activate (Windows) or source /venv/bin/activate (Linux)
